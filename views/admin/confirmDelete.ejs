@@ -1,0 +1,43 @@
+<!-- confirmDelete.ejs -->
+<%- include('../layout/layout') %>
+<%- include('../partials/adminSideMenu') %>
+<main class="main-wrap">
+    <%- include('../partials/adminHeader') %>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-6">
+                <div class="content-header">
+                    <h2 class="content-title">Confirm Deletion</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>Delete Product: <%= product.productName %></h4>
+                        <p><strong>Description:</strong> <%= product.productDescription %></p>
+                        <p><strong>Brand:</strong> <%= product.brandName %></p>
+                        <p><strong>Price:</strong> <%= product.price %></p>
+                        <p><strong>Category:</strong> <%= product.category %></p>
+                        <ul class="d-flex justify-content-between">
+                            <% product.productImage.forEach(image=> { %>
+                                <li>
+                                    <img src="/assets/imgs/category/<%= image %>"
+                                        alt="Product Image"
+                                        style="max-width: 100px; max-height: 60px;">
+                                </li>
+                                <% }) %>
+                        </ul>
+
+                        <!-- Add a confirmation button that triggers the actual deletion -->
+                        <form action="/admin/confirm-delete-product?id=<%= product._id %>" method="POST">
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include('../partials/adminFooter') %>
+</main>

@@ -1,0 +1,72 @@
+<%- include('../layout/layout') %>
+<%- include('../partials/adminSideMenu') %>
+<main class="main-wrap">
+<%- include('../partials/adminHeader') %>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Product Management</h2>
+            </div>
+            <div class="sort-options">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select">
+                    <option value=""></option>
+                    <option value="id">ID</option>
+                    <option value="name">Name</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-4">
+                    <a href="/admin/add-product" class="btn btn-info">Add Product</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach(function(product) { %>
+                    <tr>
+                        <td><%= product._id %></td>
+                        <td>
+                            <img src="/assets/imgs/category/<%= product.productImage[0] %>" class="" alt="Product Image" style="width: 20px; height: 40px; vertical-align: middle;">
+                        </td>
+                        <td><%= product.productName %></td>
+                        <td><%= product.brandName %></td>
+                        <td><%= product.price %></td>
+                        <td><%= product.category %></td>
+                        <td><a href="/admin/edit-product?id=<%= product._id %>"><i class="material-icons">edit</i></a></td>
+                        <td><a href="/admin/delete-product?id=<%= product._id %>" style="vertical-align: middle"><i class="material-icons">delete</i></a></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <%- include('../partials/adminFooter') %>
+</main>
+</div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#sort-select').on('change', function () {
+            const sortBy = $(this).val();
+            const url = `/admin/products?sort=${sortBy}`;
+            window.location.href = url;
+        });
+    });
+</script>

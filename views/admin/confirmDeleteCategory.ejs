@@ -1,0 +1,29 @@
+<%- include('../layout/layout') %>
+<%- include('../partials/adminSideMenu') %>
+<main class="main-wrap">
+    <%- include('../partials/adminHeader') %>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-12">
+                <div class="content-header">
+                    <h2 class="content-title">Confirm Category Deletion</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>Are you sure you want to delete category? <span class="text-primary"><%= category.categoryName %></span> </h4>
+                        <form action="/admin/delete-category?category=<%= category._id %>" method="post" class="my-2">
+                            <input type="hidden" name="categoryID" value="<%= category._id %>">
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                            <a href="/admin/categories" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include('../partials/adminFooter') %>
+</main>

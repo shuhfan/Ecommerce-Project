@@ -1,0 +1,228 @@
+<%- include('../layout/layout') %>
+    <%- include('../partials/adminSideMenu') %>
+        <main class="main-wrap">
+            <%- include('../partials/adminHeader') %>
+                <section class="content-main">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="content-header">
+                                <h2 class="content-title">Edit Product</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <style>
+                                        .error-label {
+                                            color: red;
+                                        }
+                                    </style>
+                                    <div id="errorMessage" style="color: red;"></div>
+                                    <form action="/admin/edit-product?id=<%=product._id %>" method="post"
+                                        id="editProductForm" enctype="multipart/form-data"
+                                        onsubmit="return validateForm()">
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>1. General info</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="productTitle" class="form-label">Product title</label>
+                                                    <input type="text" id="productTitle" name="productTitle"
+                                                        value="<%= product.productName %>" class="form-control"
+                                                        required>
+                                                    <label id="productTitleError" class="error-label"></label>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="productDescription"
+                                                        class="form-label">Description</label>
+                                                    <textarea id="productDescription" name="productDescription"
+                                                        class="form-control" rows="4"
+                                                        required><%= product.productDescription %></textarea>
+                                                    <label id="productDescriptionError" class="error-label"></label>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="brandName" class="form-label">Brand Name</label>
+                                                    <input type="text" id="brandName" name="brandName"
+                                                        value="<%= product.brandName %>" class="form-control" required>
+                                                    <label id="brandNameError" class="error-label"></label>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>2. Pricing</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="costInINR" class="form-label">Cost in INR</label>
+                                                    <input type="text" id="costInINR" name="costInINR"
+                                                        value="<%= product.price %>" class="form-control" required>
+                                                    <label id="costInINRError" class="error-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>3. Category</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="category" class="form-label">Category</label>
+                                                    <select id="category" name="category" class="form-control" required>
+                                                        <% categories.forEach(category=> { %>
+                                                            <option value="<%= category.categoryName %>" <% if
+                                                                (category.categoryName===product.category) { %>selected
+                                                                <% } %>>
+                                                                    <%= category.categoryName %>
+                                                            </option>
+                                                            <% })%>
+                                                    </select>
+                                                    <label id="categoryError" class="error-label"></label>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>4. Media</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <!-- Existing Images -->
+                                                <div class="mb-4">
+                                                    <label for="existingImages" class="form-label">Existing
+                                                        Images</label>
+                                                    <ul class="d-flex justify-content-between">
+                                                        <% product.productImage.forEach(image=> { %>
+                                                            <li>
+                                                                <img src="/assets/imgs/category/<%= image %>"
+                                                                    alt="Product Image"
+                                                                    style="max-width: 100px; max-height: 60px;">
+                                                                <input type="checkbox" name="removeImages"
+                                                                    value="<%= image %>"> Remove
+                                                            </li>
+                                                            <% }) %>
+                                                    </ul>
+                                                </div>
+
+                                                <!-- New Images -->
+                                                <div class="mb-4">
+                                                    <label for="newImages" class="form-label">New Images</label>
+                                                    <div id="imageError" class="error-label" style="color: red;"></div>
+                                                    <input type="file" id="newImages" name="newImages" accept="image/*"
+                                                        class="form-control" multiple onchange="validateImage(this)">
+                                                </div>
+
+                                            </div> <!-- col.// -->
+                                        </div> <!-- .row end// -->
+                                        <button type="submit" class="btn btn-md rounded font-sm hover-up">Save
+                                            Changes</button>
+                                        <input type="hidden" name="productId" value="<%= product._id %>">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    <%- include('../partials/adminFooter') %>
+
+        </main>
+        <script>
+            function validateForm() {
+                // Reset previous error messages
+                resetErrorMessages();
+        
+                const productTitle = document.getElementById('productTitle').value;
+                const productDescription = document.getElementById('productDescription').value;
+                const brandName = document.getElementById('brandName').value;
+                const costInINR = document.getElementById('costInINR').value;
+                const category = document.getElementById('category').value;
+        
+                let isValid = true;
+        
+                // Check if fields are empty or contain only whitespace
+                if (productTitle.trim() === '') {
+                    displayErrorMessage('Please enter a valid product title.', 'productTitleError');
+                    isValid = false;
+                }
+        
+                if (productDescription.trim() === '') {
+                    displayErrorMessage('Please enter a valid product description.', 'productDescriptionError');
+                    isValid = false;
+                }
+        
+                if (brandName.trim() === '') {
+                    displayErrorMessage('Please enter a valid brand name.', 'brandNameError');
+                    isValid = false;
+                }
+        
+                if (costInINR.trim() === '') {
+                    displayErrorMessage('Please enter a valid cost in INR.', 'costInINRError');
+                    isValid = false;
+                }
+        
+                if (category === '') {
+                    displayErrorMessage('Please select a valid category.', 'categoryError');
+                    isValid = false;
+                }
+        
+                // Validate image
+                const imageInput = document.getElementById('imageInput');
+                if (!validateImage(imageInput)) {
+                    isValid = false;
+                }
+        
+                if (isValid) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        
+            function validateImage(imageInput) {
+                const errorMessage = document.getElementById('imageError');
+        
+                // Check if any files are selected
+                if (imageInput.files.length === 0) {
+                    displayErrorMessage('Please select an image.', 'imageError');
+                    return false;
+                }
+        
+                // Get the selected file
+                const file = imageInput.files[0];
+        
+                // Check if the file type is an image
+                if (!file.type.startsWith('image/')) {
+                    displayErrorMessage('Invalid file type. Only images are allowed.', 'imageError');
+                    // Clear the file input
+                    imageInput.value = '';
+                    return false;
+                }
+        
+                // Clear any previous error messages
+                errorMessage.textContent = '';
+        
+                return true;
+            }
+        
+            function displayErrorMessage(message, errorElementId) {
+                const errorElement = document.getElementById(errorElementId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        
+            function resetErrorMessages() {
+                // Hide all error messages
+                const errorElements = document.querySelectorAll('.error-label');
+                errorElements.forEach((errorElement) => {
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                });
+            }
+        </script>
+        

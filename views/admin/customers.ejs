@@ -1,0 +1,63 @@
+<%- include('../layout/layout') %>
+<%- include('../partials/adminSideMenu') %>
+<main class="main-wrap">
+    <%- include('../partials/adminHeader') %>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">User Management</h2>
+            </div>
+            <div class="sort-options">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select">
+                    <option value=""></option>
+                    <option value="id">ID</option>
+                    <option value="name">Name</option>
+                    <option value="email">Email</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% userData.forEach(user => { %>
+                        <tr>
+                            <td><%= user.id %></td>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.is_blocked ? 'Blocked' : 'Active' %></td>
+                            <td>
+                                <% if (user.is_blocked) { %>
+                                    <a href="/admin/changestatus?user=<%= user.id %>" class="btn btn-success">Unblock</a>
+                                <% } else { %>
+                                    <a href="/admin/changestatus?user=<%= user.id %>" class="btn btn-danger">Block</a>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+<%- include('../partials/adminFooter') %>
+</main>
+<script>
+    $(document).ready(function () {
+        $('#sort-select').on('change', function () {
+            const sortBy = $(this).val();
+            const url = `/admin/users?sort=${sortBy}`;
+            window.location.href = url;
+        });
+    });
+</script>

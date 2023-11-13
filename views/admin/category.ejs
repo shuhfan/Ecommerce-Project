@@ -1,0 +1,97 @@
+<%- include('../layout/layout') %>
+<%- include('../partials/adminSideMenu') %>
+<main class="main-wrap">
+    <%- include('../partials/adminHeader') %>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Categories </h2>
+                <p>Add, edit or delete a category</p>
+            </div>
+            <div>
+                <input type="text" placeholder="Search Categories" class="form-control bg-white">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form action="/admin/add-category" method="post" onsubmit="return validateForm()">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="product_name" id="product_name" />
+                                <p id="existingCategories" style="display:none;">
+                                    <% categories.forEach(category => { %>
+                                        <%= category.categoryName %>
+                                    <% }) %>
+                                </p>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary">Create category</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% categories.forEach(category => { %>
+                                    <tr>
+                                        <td><%= category.id %></td>
+                                        <td><%= category.categoryName %></td>
+                                        <td><% if (category.is_list) { %> Listed <% } else { %> Not Listed <% } %></td>
+                                        <td>
+                                            <% if (category.is_list) { %>
+                                            <a href="/admin/unlist?category=<%= category.id %>" class="btn btn-warning">UnList</a>
+                                            <% } else { %>
+                                            <a href="/admin/unlist?category=<%= category.id %>" class="btn btn-primary">list</a>
+                                            <% } %>
+                                            <a href="/admin/confirm-delete-category?category=<%= category.id %>"
+                                                class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- .col// -->
+                </div> <!-- .row // -->
+            </div> <!-- card body .// -->
+        </div> <!-- card .// -->
+    </section> <!-- content-main end// -->
+    <%- include('../partials/adminFooter') %>
+</main>
+
+<script>
+    function validateForm() {
+        const productName = document.getElementById('product_name').value;
+        const existingCategories = document.getElementById('existingCategories').innerText.toLowerCase();
+
+        // Check if the product name is empty or contains only whitespace
+        if (productName.trim() === '') {
+            alert('Please enter a valid name.');
+            return false; // Prevent form submission
+        }
+
+        // Check if the category name already exists in the embedded list (case-insensitive)
+        if (existingCategories.includes(productName.trim().toLowerCase())) {
+            alert('Category with this name already exists. Please choose a different name.');
+            return false; // Prevent form submission
+        }
+
+        // You can add more validation rules as needed
+
+        return true; // Allow form submission
+    }
+</script>
+
+
+

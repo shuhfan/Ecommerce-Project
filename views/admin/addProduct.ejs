@@ -1,0 +1,180 @@
+<%- include('../layout/layout') %>
+    <%- include('../partials/adminSideMenu') %>
+        <main class="main-wrap">
+            <%- include('../partials/adminHeader') %>
+                <section class="content-main">
+                    <b>
+                        <marquee id="marquee" behavior="alternate" direction="left" style="color: rgb(0, 255, 255);">
+                            <% if (message) { %>
+                                <%= message %>
+                                    <% } %>
+                        </marquee>
+                    </b>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="content-header">
+                                <h2 class="content-title">Add New Product</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <style>
+                                        .error-label {
+                                            color: red;
+                                        }
+                                    </style>
+                                    <form action="/admin/add-product" method="post" id="addProductForm"
+                                        enctype="multipart/form-data" onsubmit="return validateForm()">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>1. General info</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="productTitle" class="form-label">Product title</label>
+                                                    <input type="text" id="productTitle" name="productTitle"
+                                                        placeholder="Type here" class="form-control" required>
+                                                    <label id="productTitleError" class="error-label"></label>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="productDescription"
+                                                        class="form-label">Description</label>
+                                                    <textarea id="productDescription" name="productDescription"
+                                                        placeholder="Type here" class="form-control" rows="4"
+                                                        required></textarea>
+                                                    <label id="productDescriptionError" class="error-label"></label>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="brandName" class="form-label">Brand Name</label>
+                                                    <input type="text" id="brandName" name="brandName"
+                                                        placeholder="Type here" class="form-control" required>
+                                                    <label id="brandNameError" class="error-label"></label>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>2. Pricing</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="costInINR" class="form-label">Cost in INR</label>
+                                                    <input type="text" id="costInINR" name="costInINR"
+                                                        placeholder="$00.0" class="form-control" required>
+                                                    <label id="costInINRError" class="error-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>3. Category</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="category" class="form-label">Category</label>
+                                                    <select id="category" name="category" class="form-control" required>
+                                                        <% categories.forEach(category=> { %>
+                                                            <option value="<%= category.categoryName %>">
+                                                                <%= category.categoryName %>
+                                                            </option>
+                                                            <% })%>
+                                                    </select>
+                                                    <label id="categoryError" class="error-label"></label>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>4. Media</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label for="images" class="form-label">Images</label>
+                                                    <input type="file" id="images" name="images" class="form-control"
+                                                        multiple required>
+                                                    <label id="imagesError" class="error-label"></label>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- .row end// -->
+                                        <button type="submit"
+                                            class="btn btn-md rounded font-sm hover-up">Publish</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    <%- include('../partials/adminFooter') %>
+        </main>
+        
+        <script>
+            function validateForm() {
+                // Reset previous error messages
+                resetErrorMessages();
+
+                const productTitle = document.getElementById('productTitle').value;
+                const productDescription = document.getElementById('productDescription').value;
+                const brandName = document.getElementById('brandName').value;
+                const costInINR = document.getElementById('costInINR').value;
+                const category = document.getElementById('category').value;
+
+                let isValid = true;
+
+                // Check if fields are empty or contain only whitespace
+                if (productTitle.trim() === '') {
+                    displayErrorMessage('Please enter a valid product title.', 'productTitleError');
+                    isValid = false;
+                }
+
+                if (productDescription.trim() === '') {
+                    displayErrorMessage('Please enter a valid product description.', 'productDescriptionError');
+                    isValid = false;
+                }
+
+                if (brandName.trim() === '') {
+                    displayErrorMessage('Please enter a valid brand name.', 'brandNameError');
+                    isValid = false;
+                }
+
+                if (costInINR.trim() === '') {
+                    displayErrorMessage('Please enter a valid cost in INR.', 'costInINRError');
+                    isValid = false;
+                }
+
+                if (category === '') {
+                    displayErrorMessage('Please select a valid category.', 'categoryError');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function displayErrorMessage(message, errorElementId) {
+                const errorElement = document.getElementById(errorElementId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+
+            function resetErrorMessages() {
+                // Hide all error messages
+                const errorElements = document.querySelectorAll('.error-label');
+                errorElements.forEach((errorElement) => {
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                });
+            }
+            setTimeout(() => {
+                const marquee = document.getElementById('marquee')
+                marquee.innerHTML = ''
+            }, 4000);
+
+        </script>
