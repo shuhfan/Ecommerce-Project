@@ -2,23 +2,19 @@
 let generatedOTP
 function sendOTP(event) {
     event.preventDefault();
-
-    // Disable the "Send OTP" button
     const sendOTPLink = document.getElementById('send-otp');
     sendOTPLink.style.display = 'none';
-
-    // Start the countdown
-    countdown = 60;  // Reset the countdown
-    updateCountdownDisplay();
-    countdownInterval = setInterval(updateCountdown, 1000);
 
     const phone = document.getElementById('phone').value;
     if (!isValidPhoneNumber(phone)) {
         displayErrorMessage('Please enter a valid phone number.', 'phone-error');
-        clearInterval(countdownInterval);
-        sendOTPLink.style.display = 'block';
+        sendOTPLink.style.display = 'block';  
         return;
     }
+
+    countdown = 60;  
+    updateCountdownDisplay();
+    countdownInterval = setInterval(updateCountdown, 1000);
 
     fetch(`/send_otp?phone=${phone}`)
         .then(response => {
@@ -32,6 +28,10 @@ function sendOTP(event) {
         })
         .then(data => {
             showNotification(data.message, false);
+
+            // Show the OTP field after sending OTP
+            document.getElementById('otp-field').style.display = 'block';
+
             generatedOTP = data.generatedOTP;
         })
         .catch(error => {
@@ -41,6 +41,7 @@ function sendOTP(event) {
             sendOTPLink.style.display = 'block';
         });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const fields = ['name', 'email', 'password', 'phone', 'otp'];

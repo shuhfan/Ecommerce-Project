@@ -28,7 +28,6 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Brand</th>
@@ -41,7 +40,6 @@
                 <tbody>
                     <% products.forEach(function(product) { %>
                     <tr>
-                        <td><%= product._id %></td>
                         <td>
                             <img src="/assets/imgs/category/<%= product.productImage[0] %>" class="" alt="Product Image" style="width: 20px; height: 40px; vertical-align: middle;">
                         </td>

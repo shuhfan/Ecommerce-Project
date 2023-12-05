@@ -1,0 +1,25 @@
+<%- include('../partials/userHeader') %>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Checkout</h2>
+    <form action="/process-payment" method="post">
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <textarea class="form-control" id="address" name="address" style="height: 130px;resize: none;" disabled required>
+Name: <%= user.name %>
+Phone: <%= user.phone %>
+Street: <%= user.address.street %>
+City: <%= user.address.city %> 
+Pincode: <%= user.address.postalCode %>
+</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="paymentOption" class="form-label">Select Payment Option</label>
+            <select class="form-select" id="paymentOption" name="paymentOption" required>
+                <option value="cod">Cash on Delivery</option>
+                <option value="razorpay">Razorpay</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Proceed to Pay</button>
+    </form>
+</div>

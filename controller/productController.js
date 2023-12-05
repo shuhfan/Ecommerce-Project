@@ -88,22 +88,18 @@ const updateProduct = async (req, res) => {
         const productId = req.query.id;
         const product = await Product.findById(productId);
 
-        // Invoke multer to handle file uploads
         upload.array('newImages', 6)(req, res, async (err) => {
             if (err) {
                 console.error(err);
-                res.redirect('/admin/products'); // Handle upload error
+                res.redirect('/admin/products'); 
                 return;
             }
-            // Handle image removal
             let removedImages = [];
             if (Array.isArray(req.body.removeImages)) {
-                // If multiple images are to be removed
                 removedImages = req.body.removeImages.filter(removedImage =>
                     product.productImage.includes(removedImage)
                 );
             } else if (product.productImage.includes(req.body.removeImages)) {
-                // If only one image is to be removed
                 removedImages = [req.body.removeImages];
             }
 
@@ -123,21 +119,17 @@ const updateProduct = async (req, res) => {
                 });
             });
 
-            // Update product details
             product.productName = req.body.productTitle;
             product.productDescription = req.body.productDescription;
             product.brandName = req.body.brandName;
             product.price = req.body.costInINR;
             product.category = req.body.category;
 
-            // Handle new images
             if (req.files) {
                 for (const image of req.files) {
                     product.productImage.push(image.filename);
                 }
             }
-
-            // Save the updated product
             await product.save();
 
             res.redirect('/admin/products');
@@ -196,9 +188,10 @@ const aProductPage = async (req, res) => {
         const user = await User.findById(userId);
         const productId = req.query.id;
         const product = await Product.findById(productId);
+        const categories = await Category.find()
 
         if (product) {
-            res.render('aProduct', { user, product })
+            res.render('aProduct', { user, product,categories })
         }
 
 
