@@ -1,25 +1,82 @@
-<%- include('../partials/userHeader') %>
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Checkout</h2>
-    <form action="/process-payment" method="post">
-        <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <textarea class="form-control" id="address" name="address" style="height: 130px;resize: none;" disabled required>
-Name: <%= user.name %>
-Phone: <%= user.phone %>
-Street: <%= user.address.street %>
-City: <%= user.address.city %> 
-Pincode: <%= user.address.postalCode %>
-</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="paymentOption" class="form-label">Select Payment Option</label>
-            <select class="form-select" id="paymentOption" name="paymentOption" required>
-                <option value="cod">Cash on Delivery</option>
-                <option value="razorpay">Razorpay</option>
-            </select>
-        </div>
+<!-- checkout.ejs -->
 
-        <button type="submit" class="btn btn-success">Proceed to Pay</button>
-    </form>
-</div>
+<%- include('../partials/userHeader') %>
+
+<section class="pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="border p-md-4 p-3 border-radius">
+                    <!-- Display user addresses -->
+                    <div class="mb-4">
+                        <form action="/cart/checkout" method="POST" id="checkoutForm">
+                            <div class="list-group">
+                                <% addresses.forEach((address, index) => { %>
+                                    <h5>Select Address</h5>
+                                    <label class="list-group-item">
+                                        <input type="radio" name="selectedAddress" value="<%= address.id %>" class="form-check-input me-2" <%= index === 0 ? 'checked' : '' %>>
+                                        <span>
+                                            <strong>Street:</strong> <%= address.street %><br>
+                                            <strong>City:</strong> <%= address.city %><br>
+                                            <strong>State:</strong> <%= address.state %><br>
+                                            <strong>Postal Code:</strong> <%= address.postalCode %>
+                                        </span>
+                                    </label>
+                                <% }); %>
+                            </div>
+                            <a href="/profile" class="btn btn-primary">
+                                Add New Address
+                            </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="border p-md-4 p-3 border-radius">
+                    <div class="heading_s1 mb-3">
+                        <h4>Checkout</h4>
+                    </div>
+                    <!-- Check if at least one address is available -->
+                    <% if (addresses.length > 0) { %>
+                        <!-- Payment Method -->
+                        <div class="mb-4 mt-4">
+                            <h5>Select Payment Method</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" value="COD" id="codRadio" checked>
+                                <label class="form-check-label" for="codRadio">
+                                    Cash on Delivery (COD)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" value="Razorpay" id="razorpayRadio">
+                                <label class="form-check-label" for="razorpayRadio">
+                                    Razorpay
+                                </label>
+                            </div>
+                        </div>
+                        <!-- "Place Order" button inside the form -->
+                        <button type="submit" class="btn btn-primary" onclick="return validateAddress()">
+                            <i class="fi-rs-box-alt me-2"></i> Place Order
+                        </button>
+                    <% } else { %>
+                        <p>Please add an address before placing an order.</p>
+                    <% } %>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('../partials/userFooter') %>
+
+<script>
+    function validateAddress() {
+        if (document.querySelector('input[name="selectedAddress"]:checked')) {
+            return true;
+        } else {
+            alert("Please select an address before placing an order.");
+            return false;
+        }
+    }
+</script>

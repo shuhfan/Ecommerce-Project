@@ -51,37 +51,45 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Order</th>
                                                         <th>Date</th>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
                                                         <th>Status</th>
-                                                        <th>Total</th>
-                                                        <th>Actions</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>#1357</td>
-                                                        <td>March 45, 2020</td>
-                                                        <td>Processing</td>
-                                                        <td>$125.00 for 2 item</td>
-                                                        <td><a href="#" class="btn-small d-block">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>#2468</td>
-                                                        <td>June 29, 2020</td>
-                                                        <td>Completed</td>
-                                                        <td>$364.00 for 5 item</td>
-                                                        <td><a href="#" class="btn-small d-block">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>#2366</td>
-                                                        <td>August 02, 2020</td>
-                                                        <td>Completed</td>
-                                                        <td>$280.00 for 3 item</td>
-                                                        <td><a href="#" class="btn-small d-block">View</a></td>
-                                                    </tr>
+                                                    <% orders.forEach(order => { %>
+                                                        <% order.products.forEach(product => { %>
+                                                            <tr>
+                                                                <td><%= order.createdAt.toDateString() %></td>
+                                                                <td><%= product.product.productName %></td>
+                                                                <td><%= product.quantity %></td>
+                                                                <td>₹<%= product.product.price %></td>
+                                                                <td>
+                                                                    <% if (order.status === 'Pending') { %>
+                                                                        <button class="btn-warning border-0"><%= order.status %></button>
+                                                                    <% } else if (order.status === 'Shipped') { %>
+                                                                        <button class="btn-success border-0"><%= order.status %></button>
+                                                                    <% } else { %>
+                                                                        <!-- Handle other status cases if needed -->
+                                                                        <button class="btn btn-secondary border-0"><%= order.status %></button>
+                                                                    <% } %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if (order.status === 'Pending') { %>
+                                                                        <button class="border-0 btn-danger" onclick="cancelOrder('<%= order._id %>')">Cancel </button>
+                                                                    <% } %>
+                                                                </td>
+                                                            </tr>
+                                                        <% }); %>
+                                                    <% }); %>
                                                 </tbody>
+                                                
                                             </table>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -69,9 +69,7 @@
                                     <h5 class="product-name"><a href="<%= item.product.productLink %>">
                                             <%= item.product.productName %>
                                         </a></h5>
-                                    <p class="font-xs">
-                                        <%= item.product.productDescription %>
-                                    </p>
+                                    
                                 </td>
                                 <td class="price" data-title="Price"><span>₹<%= item.product.price %></span></td>
                                 <td class="text-center" data-title="Stock">
@@ -138,44 +136,6 @@
 
         <!-- Cart Totals Section -->
         <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="border p-md-4 p-30 border-radius cart-totals">
-                    <div class="heading_s1 mb-3">
-                        <h4>User Address</h4>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td class="cart_total_label">User Name</td>
-                                    <td class="cart_total_amount">
-                                        <% if (user && user.name) { %>
-                                            <%= user.name %>
-                                        <% } else { %>
-                                            N/A
-                                        <% } %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart_total_label">Address</td>
-                                    <td class="cart_total_amount">
-                                        <% if (user && user.addresses.street && user.address.city && user.address.postalCode) { %>
-                                            Street: <%= user.addresses.street %><br>
-                                            City: <%= user.addresses.city %> <br>
-                                            Pincode: <%= user.addresses.postalCode %>
-                                        <% } else { %>
-                                            N/A
-                                        <% } %>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a href="/profile" class="btn">change</a>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="col-lg-6 col-md-12">
                 <div class="border p-md-4 p-30 border-radius cart-totals">
                     <div class="heading_s1 mb-3">

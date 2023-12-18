@@ -19,35 +19,21 @@
                                     <div class="detail-gallery">
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                         <!-- MAIN SLIDES -->
-
-
-
                                         <div class="product-image-slider">
-                                            <% for (let i=0; i < product.productImage.length; i++) { %>
+                                            <% for (let i = 0; i < product.productImage.length; i++) { %>
                                                 <figure class="border-radius-10">
-                                                    <img src="/assets/imgs/category/<%= product.productImage[i] %>" alt="product image" alt="product image">
+                                                    <img src="/assets/imgs/category/<%= product.productImage[i] %>" alt="product image">
                                                 </figure>
-                                                <% } %>
-                                            
-
-
-
+                                            <% } %>
                                         </div>
-
-
-
-
-
                                         <!-- THUMBNAILS -->
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
-
-                                            <% for (let i=0; i < product.productImage.length; i++) { %>
-                                            <div><img src="/assets/imgs/category/<%= product.productImage[i] %>" alt="product image"></div>
+                                            <% for (let i = 0; i < product.productImage.length; i++) { %>
+                                                <div><img src="/assets/imgs/category/<%= product.productImage[i] %>" alt="product image"></div>
                                             <% } %>
-
-
                                         </div>
                                     </div>
+                                    
                                     <!-- End Gallery -->
                                     <div class="social-icons single-share">
                                         <ul class="text-grey-5 d-inline-block">

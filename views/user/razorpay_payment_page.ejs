@@ -1,0 +1,52 @@
+<!-- razorpay_payment_page.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment Page</title>
+    <!-- Include Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body>
+    <h1>Razorpay Payment Page</h1>
+
+    <!-- Display order details or any relevant information -->
+    <p>Order Amount: <%= razorpayOrder.amount / 100 %> INR</p>
+    <p>Order ID: <%= razorpayOrder.id %></p>
+
+    <!-- Add a button to initiate Razorpay payment -->
+    <button id="rzp-button">Pay Now</button>
+
+    <script>
+        // Initialize Razorpay with your key ID
+        var options = {
+            key: 'rzp_test_lNleE8uTGkM8LM',
+            amount: '<%= razorpayOrder.amount %>'*100,
+            currency: 'INR',
+            name: 'Razorpay',
+            description: 'Payment for Order',
+            order_id: '<%= razorpayOrder.id %>',
+            handler: function (response) {
+                console.log(response);
+            },
+            prefill: {
+                name: '<%= user.name%>',
+                email: '<%=user.email%>',
+                contact: '<%=user.phone%>',
+            },
+        };
+
+        var rzp = new Razorpay(options);
+
+        // Attach the event handler to the button
+        document.getElementById('rzp-button').onclick = function () {
+            rzp.open();
+        };
+    </script>
+</body>
+
+</html>

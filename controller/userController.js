@@ -1,6 +1,7 @@
 const User = require('../models/UserModel')
 const Product = require('../models/ProductModel')
 const Category = require('../models/categoryModel')
+const Order = require('../models/orderModel')
 const bcrypt = require('bcrypt')
 const twilio = require('twilio')
 const securePassword = async (password) => {
@@ -164,14 +165,22 @@ const loadProfile = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const user = await User.findById(userId);
-        const categories = await Category.find()
-        const address = user.addresses
-        res.render('userProfile', { user, categories, address });
+        const categories = await Category.find();
+        
+        // Populate the orders with product details
+        const orders = await Order.find({ user: userId }).populate({
+            path: 'products.product',
+            model: 'products',
+        });
+
+        const address = user.addresses;
+        res.render('userProfile', { user, categories, address, orders });
 
     } catch (error) {
         console.log("user controller userProfile error", error);
     }
-}
+};
+
 const updateUserProfile = async (req, res) => {
     const { name, phone, addresses } = req.body; // Modify to handle an array of addresses
     const userId = req.session.user_id;

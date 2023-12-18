@@ -65,5 +65,6 @@ router.put('/updateQuantity/:productId',auth.isLogin, async (req, res) => {
   });
 
 router.get('/checkout',auth.isLogin,cartController.paymentPage)
+router.post('/checkout', auth.isLogin, cartController.placeOrder);
 
 module.exports = router;
